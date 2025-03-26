@@ -49,7 +49,7 @@ public class CenterServiceImpl implements CenterService{
                 centerUpdateDTO.getCoordinates().getLongitude()
         );
         if (existingCenter.isPresent() && !existingCenter.get().getId().equals(id)) {
-            throw new DuplicateCenterException("There is already a logistics center in that position.");
+             throw new DuplicateCenterException("There is already a logistics center in that position.");
         }
         center.setName(centerUpdateDTO.getName());
         center.setCapacity(centerUpdateDTO.getCapacity());

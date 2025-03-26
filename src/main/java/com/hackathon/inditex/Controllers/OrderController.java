@@ -1,0 +1,40 @@
+package com.hackathon.inditex.Controllers;
+
+import com.hackathon.inditex.Entities.Order;
+import com.hackathon.inditex.Services.OrderService;
+import com.hackathon.inditex.dto.OrderAssignationResponseDTO;
+import com.hackathon.inditex.dto.OrderDTO;
+import com.hackathon.inditex.dto.OrderResponseDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/orders")
+public class OrderController {
+
+    @Autowired
+    private OrderService orderService;
+
+
+    @PostMapping("/order-assignations")
+    public ResponseEntity<OrderAssignationResponseDTO> assignOrders() {
+        OrderAssignationResponseDTO orderAssignationResponseDTO = orderService.assignOrders();
+        return ResponseEntity.ok(orderAssignationResponseDTO);
+    }
+
+    @PostMapping
+    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderDTO orderDTO) {
+        OrderResponseDTO orderResponseDTO = orderService.createOrder(orderDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Order>> getAllOrders() {
+        List<Order> orders = orderService.getAllOrders();
+        return ResponseEntity.ok(orders);
+    }
+}
