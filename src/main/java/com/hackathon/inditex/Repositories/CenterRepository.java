@@ -1,4 +1,4 @@
-package com.hackathon.inditex.repositories;
+package com.hackathon.inditex.Repositories;
 
 import com.hackathon.inditex.Entities.Center;
 import org.springframework.data.jpa.repository.JpaRepository;

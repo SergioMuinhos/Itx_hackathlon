@@ -1,4 +1,4 @@
-package com.hackathon.inditex.services;
+package com.hackathon.inditex.Services;
 
 import com.hackathon.inditex.Entities.Center;
 import com.hackathon.inditex.dto.CenterDTO;

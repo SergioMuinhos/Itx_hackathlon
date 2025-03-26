@@ -1,4 +1,4 @@
-package com.hackathon.inditex.mappers;
+package com.hackathon.inditex.Entities.mappers;
 
 import com.hackathon.inditex.Entities.Center;
 import com.hackathon.inditex.Entities.Coordinates;
