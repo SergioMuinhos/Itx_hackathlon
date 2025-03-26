@@ -37,7 +37,7 @@ public class CenterController {
         return ResponseEntity.ok(centers);
     }
 
-    @PatchMapping("{id")
+    @PatchMapping("{id}")
     public ResponseEntity<?> updateCenter(@PathVariable Long id, @RequestBody CenterUpdateDTO centerUpdateDTO){
         try{
             centerService.updateCenter(id, centerUpdateDTO);
