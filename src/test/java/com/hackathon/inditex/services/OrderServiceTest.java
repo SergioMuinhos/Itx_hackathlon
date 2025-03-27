@@ -167,7 +167,7 @@ import static org.mockito.ArgumentMatchers.any;
 
         assertNotNull(result);
         assertEquals(2, result.getProcessedOrders().size());
-        assertEquals("PENDING", result.getProcessedOrders().get(0).getStatus());
+        assertEquals("ASSIGNED", result.getProcessedOrders().get(0).getStatus());
         assertEquals("Center France", result.getProcessedOrders().get(0).getAssignedLogisticsCenter());
         assertEquals("PENDING", result.getProcessedOrders().get(1).getStatus());
         assertEquals("All centers are at maximum capacity.", result.getProcessedOrders().get(1).getMessage());
