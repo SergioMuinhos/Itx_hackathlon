@@ -12,6 +12,7 @@ import com.hackathon.inditex.Repositories.CenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @Service
 @Transactional
+@Validated
 public class CenterServiceImpl implements CenterService{
 
     @Autowired
