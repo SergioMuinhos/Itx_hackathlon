@@ -18,6 +18,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Order Service Implementation.
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -27,6 +30,11 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private CenterRepository centerRepository;
 
+    /**
+     * Create Order.
+     * @param orderDTO order to create
+     * @return order createdDTO
+     */
     @Override
     public OrderResponseDTO createOrder(OrderDTO orderDTO) {
         Order order = MapperOrder.toDto(orderDTO);
@@ -35,12 +43,19 @@ public class OrderServiceImpl implements OrderService {
         return MapperOrder.getOrderResponseDTO(savedOrder);
     }
 
+    /**
+     * Get All Orders.
+     * @return
+     */
     @Override
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
 
-
+    /**
+     * Assign Orders.
+     * @return
+     */
     @Override
     @Transactional
     public OrderAssignationResponseDTO assignOrders() {
@@ -92,6 +107,12 @@ public class OrderServiceImpl implements OrderService {
         return MapperOrder.getOrderAssignationResponseDTO(processedOrders);
     }
 
+    /**
+     * Calculate distance between order and center.
+     * @param order order to calculate distance
+     * @param center center to calculate distance
+     * @return distance between order and center
+     */
     private Double calculateDistance(Order order, Center center) {
         double latitude1 = order.getCoordinates().getLatitude();
         double longitude1 = order.getCoordinates().getLongitude();

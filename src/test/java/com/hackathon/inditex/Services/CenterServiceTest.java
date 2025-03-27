@@ -33,7 +33,6 @@ public class CenterServiceTest {
     @BeforeEach
     void setUp(){
         MockitoAnnotations.openMocks(this);
-       // centerRepository.deleteAll();
     }
 
     @AfterEach

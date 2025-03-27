@@ -6,6 +6,9 @@ import com.hackathon.inditex.dto.CenterUpdateDTO;
 
 import java.util.List;
 
+/**
+ * Center Service Interface.
+ */
 public interface CenterService {
 
     public Center createCenter(CenterDTO centerDTO);

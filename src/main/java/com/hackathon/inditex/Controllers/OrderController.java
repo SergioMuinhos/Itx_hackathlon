@@ -19,19 +19,31 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-
+    /**
+     * Assign Orders
+     * @return
+     */
     @PostMapping("/order-assignations")
     public ResponseEntity<OrderAssignationResponseDTO> assignOrders() {
         OrderAssignationResponseDTO orderAssignationResponseDTO = orderService.assignOrders();
         return ResponseEntity.ok(orderAssignationResponseDTO);
     }
 
+    /**
+     * Create Order
+     * @param orderDTO order to create
+     * @return
+     */
     @PostMapping
     public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderDTO orderDTO) {
         OrderResponseDTO orderResponseDTO = orderService.createOrder(orderDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDTO);
     }
 
+    /**
+     * Get All Orders
+     * @return
+     */
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
         List<Order> orders = orderService.getAllOrders();

@@ -4,8 +4,11 @@ import com.hackathon.inditex.Entities.Center;
 import com.hackathon.inditex.Entities.Coordinates;
 import com.hackathon.inditex.dto.CenterDTO;
 
+/**
+ * Center Mapper.
+ */
 public class MapperCenter {
-    public static Center getCenter(CenterDTO centerDTO) {
+    public static Center toDto(CenterDTO centerDTO) {
         Center center = new Center();
         center.setName(centerDTO.getName());
         center.setCapacity(centerDTO.getCapacity());

@@ -6,8 +6,16 @@ import com.hackathon.inditex.dto.*;
 
 import java.util.List;
 
+/**
+ * Order Mapper.
+ */
 public class MapperOrder {
 
+    /**
+     *
+     * @param orderDTO
+     * @return
+     */
     public static Order toDto(OrderDTO orderDTO) {
         Order order = new Order();
         order.setCustomerId(orderDTO.getCustomerId());
@@ -16,6 +24,11 @@ public class MapperOrder {
         return order;
     }
 
+    /**
+     *
+     * @param coordinatesDTO
+     * @return
+     */
     public static Coordinates getCoordinates(CoordinatesDTO coordinatesDTO) {
         Coordinates coordinates = new Coordinates();
         coordinates.setLatitude(coordinatesDTO.getLatitude());
@@ -23,6 +36,11 @@ public class MapperOrder {
         return coordinates;
     }
 
+    /**
+     *
+     * @param order
+     * @return
+     */
     public static OrderResponseDTO getOrderResponseDTO(Order order) {
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
         orderResponseDTO.setOrderId(order.getId());
@@ -35,6 +53,11 @@ public class MapperOrder {
         return orderResponseDTO;
     }
 
+    /**
+     *
+     * @param coordinates
+     * @return
+     */
     public static CoordinatesDTO getCoordinatesDTO(Coordinates coordinates) {
         CoordinatesDTO coordinatesDTO = new CoordinatesDTO();
         coordinatesDTO.setLatitude(coordinates.getLatitude());

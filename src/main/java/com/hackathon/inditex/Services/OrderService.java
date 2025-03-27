@@ -7,6 +7,9 @@ import com.hackathon.inditex.dto.OrderResponseDTO;
 
 import java.util.List;
 
+/**
+ * Order Service Interface.
+ */
 public interface OrderService {
 
     OrderResponseDTO createOrder(OrderDTO orderDTO);

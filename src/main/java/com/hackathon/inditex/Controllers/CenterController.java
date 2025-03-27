@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Center Controller.
+ */
 @RestController
 @RequestMapping("/api/centers")
 public class CenterController {
@@ -20,7 +23,11 @@ public class CenterController {
     @Autowired
     private CenterService centerService;
 
-
+    /**
+     * Create Center
+     * @param centerDTO
+     * @return
+     */
     @PostMapping
     public ResponseEntity<?> createCenter(@RequestBody CenterDTO centerDTO){
         try{
@@ -31,12 +38,22 @@ public class CenterController {
         }
     }
 
+    /**
+     * Get All Centers
+     * @return List of Centers
+     */
     @GetMapping
     public  ResponseEntity<List<Center>> getAllCenters(){
         List<Center> centers = centerService.getAllCenters();
         return ResponseEntity.ok(centers);
     }
 
+    /**
+     * Update Center
+     * @param id Id of center to update
+     * @param centerUpdateDTO Center to update
+     * @return
+     */
     @PatchMapping("{id}")
     public ResponseEntity<?> updateCenter(@PathVariable Long id, @RequestBody CenterUpdateDTO centerUpdateDTO){
         try{
@@ -47,6 +64,11 @@ public class CenterController {
         }
     }
 
+    /**
+     * Delete Center
+     * @param id
+     * @return
+     */
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteCenter(@PathVariable Long id){
         try{

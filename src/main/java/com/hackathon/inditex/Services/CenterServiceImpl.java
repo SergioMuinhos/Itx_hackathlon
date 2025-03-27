@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Center Service Implementation.
+ */
 @Service
 public class CenterServiceImpl implements CenterService{
 
@@ -31,7 +34,7 @@ public class CenterServiceImpl implements CenterService{
         if(centerDTO.getCurrentLoad()>centerDTO.getMaxCapacity()){
             throw  new CurrentLoadExceedsMaxCapacityException("Current load cannot exceed max capacity.");
         }
-        Center center = MapperCenter.getCenter(centerDTO);
+        Center center = MapperCenter.toDto(centerDTO);
         
         return centerRepository.save(center);
     }
