@@ -30,7 +30,7 @@ public class CenterServiceImpl implements CenterService{
     @Override
     public CenterResponseDTO createCenter(CenterDTO centerDTO) {
         validateDuplicateCoordinates(centerDTO.getCoordinates().getLatitude(), centerDTO.getCoordinates().getLongitude());
-
+        validateCenterCapacity(centerDTO.getCurrentLoad(), centerDTO.getMaxCapacity());
         if(centerDTO.getCurrentLoad()>centerDTO.getMaxCapacity()){
             throw  new CurrentLoadExceedsMaxCapacityException("Current load cannot exceed max capacity.");
         }
