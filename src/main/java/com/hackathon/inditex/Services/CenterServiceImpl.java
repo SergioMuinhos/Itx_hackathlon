@@ -51,6 +51,23 @@ public class CenterServiceImpl implements CenterService{
             validateDuplicateCoordinates(centerUpdateDTO.getCoordinates().getLatitude(),
                     centerUpdateDTO.getCoordinates().getLongitude(), id);
         }
+        updateCenterFields(centerUpdateDTO, center);
+        centerRepository.save(center);
+        return MapperCenter.toResponseDto(center);
+    }
+
+    @Override
+    public void deleteCenter(Long id) {
+    Center center = centerRepository.findById(id).orElseThrow(()-> new CenterNotFoundException("Center not found"));
+    centerRepository.delete(center);
+    }
+
+    /**
+     * Update Center  Fields
+     * @param centerUpdateDTO
+     * @param center
+     */
+    private void updateCenterFields( CenterUpdateDTO centerUpdateDTO, Center center) {
 
         if (centerUpdateDTO.getName() != null) {
             center.setName(centerUpdateDTO.getName());
@@ -71,22 +88,25 @@ public class CenterServiceImpl implements CenterService{
         if(centerUpdateDTO.getMaxCapacity()!=null && !centerUpdateDTO.getMaxCapacity().equals(center.getMaxCapacity())){
             center.setMaxCapacity(centerUpdateDTO.getMaxCapacity());
         }
-        centerRepository.save(center);
-        return MapperCenter.toResponseDto(center);
     }
 
-    @Override
-    public void deleteCenter(Long id) {
-    Center center = centerRepository.findById(id).orElseThrow(()-> new CenterNotFoundException("Center not found"));
-    centerRepository.delete(center);
-    }
-
+    /**
+     *
+     * @param latitude
+     * @param longitude
+     */
     private void validateDuplicateCoordinates(double latitude, double longitude) {
         if (centerRepository.findByCoordinatesLatitudeAndCoordinatesLongitude(latitude, longitude).isPresent()) {
             throw new DuplicateCenterException("There is already a logistics center in that position.");
         }
     }
 
+    /**
+     *
+     * @param latitude
+     * @param longitude
+     * @param id
+     */
     private void validateDuplicateCoordinates(double latitude, double longitude, Long id) {
         centerRepository.findByCoordinatesLatitudeAndCoordinatesLongitude(latitude, longitude)
                 .ifPresent(existingCenter -> {
@@ -95,4 +115,5 @@ public class CenterServiceImpl implements CenterService{
                     }
                 });
     }
+
 }
