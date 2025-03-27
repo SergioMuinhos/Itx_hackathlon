@@ -3,6 +3,7 @@ package com.hackathon.inditex.Services;
 import com.hackathon.inditex.Entities.Center;
 import com.hackathon.inditex.Entities.Coordinates;
 import com.hackathon.inditex.dto.CenterDTO;
+import com.hackathon.inditex.dto.CenterResponseDTO;
 import com.hackathon.inditex.dto.CenterUpdateDTO;
 import com.hackathon.inditex.dto.CoordinatesDTO;
 import com.hackathon.inditex.application.exceptions.CenterNotFoundException;
@@ -70,7 +71,7 @@ public class CenterServiceTest {
         savedCenter.setCoordinates(coordinates);
 
         when(centerRepository.save(any(Center.class))).thenReturn(savedCenter);
-        Center result = centerService.createCenter(centerDTO);
+        CenterResponseDTO result = centerService.createCenter(centerDTO);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
@@ -137,7 +138,7 @@ public class CenterServiceTest {
         center2.setName("Center B");
         when(centerRepository.findAll()).thenReturn(List.of(center1, center2));
 
-        List<Center> result = centerService.getAllCenters();
+        List<CenterResponseDTO> result = centerService.getAllCenters();
 
         assertEquals(2, result.size());
         assertEquals("Center A", result.get(0).getName());
@@ -146,7 +147,6 @@ public class CenterServiceTest {
 
     @Test
     void updateCenter_Success() {
-        // Arrange
         Long id = 1L;
         CenterUpdateDTO centerUpdateDTO = new CenterUpdateDTO();
         centerUpdateDTO.setName("New Center Name");
@@ -171,10 +171,8 @@ public class CenterServiceTest {
         when(centerRepository.findByCoordinatesLatitudeAndCoordinatesLongitude(any(Double.class), any(Double.class))).thenReturn(Optional.empty());
         when(centerRepository.save(any(Center.class))).thenReturn(existingCenter);
 
-        // Act
-        Center result = centerService.updateCenter(id, centerUpdateDTO);
+        CenterResponseDTO result = centerService.updateCenter(id, centerUpdateDTO);
 
-        // Assert
         assertNotNull(result);
         assertEquals("New Center Name", result.getName());
         assertEquals("M", result.getCapacity());

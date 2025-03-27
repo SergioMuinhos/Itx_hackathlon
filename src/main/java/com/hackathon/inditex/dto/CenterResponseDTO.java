@@ -1,11 +1,9 @@
 package com.hackathon.inditex.dto;
 
 import lombok.Data;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.hibernate.annotations.processing.Pattern;
 
 @Data
-public class CenterDTO {
+public class CenterResponseDTO {
     private Long id;
     private String name;
     private String capacity;
@@ -13,4 +11,5 @@ public class CenterDTO {
     private Integer maxCapacity;
     private Integer currentLoad;
     private CoordinatesDTO coordinates;
+
 }

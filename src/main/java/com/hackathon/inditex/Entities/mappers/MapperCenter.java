@@ -3,6 +3,8 @@ package com.hackathon.inditex.Entities.mappers;
 import com.hackathon.inditex.Entities.Center;
 import com.hackathon.inditex.Entities.Coordinates;
 import com.hackathon.inditex.dto.CenterDTO;
+import com.hackathon.inditex.dto.CenterResponseDTO;
+import com.hackathon.inditex.dto.CoordinatesDTO;
 
 /**
  * Center Mapper.
@@ -26,5 +28,20 @@ public class MapperCenter {
         coordinates.setLongitude(centerDTO.getCoordinates().getLongitude());
         center.setCoordinates(coordinates);
         return center;
+    }
+
+    public static CenterResponseDTO toResponseDto(Center center) {
+        CenterResponseDTO centerDTO = new CenterResponseDTO();
+        centerDTO.setId(center.getId());
+        centerDTO.setName(center.getName());
+        centerDTO.setCapacity(center.getCapacity());
+        centerDTO.setStatus(center.getStatus());
+        centerDTO.setMaxCapacity(center.getMaxCapacity());
+        centerDTO.setCurrentLoad(center.getCurrentLoad());
+
+        CoordinatesDTO coordinatesDTO = new CoordinatesDTO();
+        coordinatesDTO.setLatitude(center.getCoordinates().getLatitude());
+        coordinatesDTO.setLongitude(center.getCoordinates().getLongitude());
+        return centerDTO;
     }
 }

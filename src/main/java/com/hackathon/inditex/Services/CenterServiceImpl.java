@@ -2,6 +2,7 @@ package com.hackathon.inditex.Services;
 
 import com.hackathon.inditex.Entities.Center;
 import com.hackathon.inditex.dto.CenterDTO;
+import com.hackathon.inditex.dto.CenterResponseDTO;
 import com.hackathon.inditex.dto.CenterUpdateDTO;
 import com.hackathon.inditex.application.exceptions.CenterNotFoundException;
 import com.hackathon.inditex.application.exceptions.CurrentLoadExceedsMaxCapacityException;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Center Service Implementation.
@@ -26,7 +26,7 @@ public class CenterServiceImpl implements CenterService{
     private CenterRepository centerRepository;
 
     @Override
-    public Center createCenter(CenterDTO centerDTO) {
+    public CenterResponseDTO createCenter(CenterDTO centerDTO) {
         validateDuplicateCoordinates(centerDTO.getCoordinates().getLatitude(), centerDTO.getCoordinates().getLongitude());
 
         if(centerDTO.getCurrentLoad()>centerDTO.getMaxCapacity()){
@@ -34,16 +34,17 @@ public class CenterServiceImpl implements CenterService{
         }
         Center center = MapperCenter.toEntity(centerDTO);
         
-        return centerRepository.save(center);
+        return MapperCenter.toResponseDto(centerRepository.save(center));
     }
 
     @Override
-    public List<Center> getAllCenters() {
-        return centerRepository.findAll();
+    public List<CenterResponseDTO> getAllCenters() {
+        return centerRepository.findAll().stream()
+                .map(MapperCenter::toResponseDto).toList();
     }
 
     @Override
-    public Center updateCenter(Long id, CenterUpdateDTO centerUpdateDTO) {
+    public CenterResponseDTO updateCenter(Long id, CenterUpdateDTO centerUpdateDTO) {
         Center center = centerRepository.findById(id).orElseThrow(() -> new CenterNotFoundException("Center not found."));
         validateDuplicateCoordinates(centerUpdateDTO.getCoordinates().getLatitude(),
                 centerUpdateDTO.getCoordinates().getLongitude(), id);
@@ -53,7 +54,7 @@ public class CenterServiceImpl implements CenterService{
         center.setStatus(centerUpdateDTO.getStatus());
         center.getCoordinates().setLatitude(centerUpdateDTO.getCoordinates().getLatitude());
         center.getCoordinates().setLongitude(centerUpdateDTO.getCoordinates().getLongitude());
-        return centerRepository.save(center);
+        return MapperCenter.toResponseDto(centerRepository.save(center)) ;
     }
 
     @Override

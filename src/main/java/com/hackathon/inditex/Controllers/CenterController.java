@@ -2,6 +2,7 @@ package com.hackathon.inditex.Controllers;
 
 import com.hackathon.inditex.Entities.Center;
 import com.hackathon.inditex.dto.CenterDTO;
+import com.hackathon.inditex.dto.CenterResponseDTO;
 import com.hackathon.inditex.dto.CenterUpdateDTO;
 import com.hackathon.inditex.application.exceptions.CenterNotFoundException;
 import com.hackathon.inditex.dto.models.MessageResponse;
@@ -43,8 +44,8 @@ public class CenterController {
      * @return List of Centers
      */
     @GetMapping
-    public  ResponseEntity<List<Center>> getAllCenters(){
-        List<Center> centers = centerService.getAllCenters();
+    public  ResponseEntity<List<CenterResponseDTO>> getAllCenters(){
+        List<CenterResponseDTO> centers = centerService.getAllCenters();
         return ResponseEntity.ok(centers);
     }
 
