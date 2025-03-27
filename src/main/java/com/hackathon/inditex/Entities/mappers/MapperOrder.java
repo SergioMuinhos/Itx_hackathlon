@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MapperOrder {
 
-    public static Order getOrder(OrderDTO orderDTO) {
+    public static Order toDto(OrderDTO orderDTO) {
         Order order = new Order();
         order.setCustomerId(orderDTO.getCustomerId());
         order.setSize(orderDTO.getSize());

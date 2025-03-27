@@ -11,9 +11,12 @@ import com.hackathon.inditex.dto.OrderResponseDTO;
 import com.hackathon.inditex.dto.ProcessedOrderDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -26,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponseDTO createOrder(OrderDTO orderDTO) {
-        Order order = MapperOrder.getOrder(orderDTO);
+        Order order = MapperOrder.toDto(orderDTO);
         order.setStatus("PENDING");
         Order savedOrder = orderRepository.save(order);
         return MapperOrder.getOrderResponseDTO(savedOrder);
@@ -37,15 +40,18 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAll();
     }
 
-    @Override
-    public OrderAssignationResponseDTO assignOrders() {
-        return null;
-    }
 
-   /* @Override
+    @Override
+    @Transactional
     public OrderAssignationResponseDTO assignOrders() {
-        List<Order> pendingOrders = orderRepository.findAll().stream().filter(order -> order.getStatus().equals("PENDING")).toList();
-        List<Center> availableCenters = centerRepository.findAll().stream().filter(center -> center.getStatus().equals("AVAILABLE")).toList();
+        List<Order> pendingOrders = orderRepository.findAll().stream()
+                .filter(order -> order.getStatus().equals("PENDING"))
+                .sorted(Comparator.comparingLong(Order::getId))
+                .toList();
+
+        List<Center> availableCenters = centerRepository.findAll().stream()
+                .filter(center -> center.getStatus().equals("AVAILABLE"))
+                .toList();
         List<ProcessedOrderDTO> processedOrders = new ArrayList<>();
 
         for (Order order : pendingOrders) {
@@ -54,53 +60,49 @@ public class OrderServiceImpl implements OrderService {
             Center assignedCenter = null;
             Double distance = null;
 
-            for (Center center : availableCenters) {
-                if (center.supportsOrderType(order.getSize())) {
-                    if (assignedCenter == null) {
-                        assignedCenter = center;
-                        distance = calculateDistance(order, center);
-                    } else {
-                        Double currentDistance = calculateDistance(order, center);
-                        if (currentDistance < distance) {
-                            assignedCenter = center;
-                            distance = currentDistance;
-                        }
-                    }
-                }
-            }
-            if (assignedCenter != null) {
+            Optional<Center> centerOptional = availableCenters.stream()
+                    .filter(center -> center.getCapacity().contains(order.getSize()) && center.getCurrentLoad() < center.getMaxCapacity()) // Comprobación con capacity
+                    .min((c1, c2) -> {
+                        double dist1 = calculateDistance(order, c1);
+                        double dist2 = calculateDistance(order, c2);
+                        return Double.compare(dist1, dist2);
+                    });
+
+            if (centerOptional.isPresent()) {
+                assignedCenter = centerOptional.get();
+                distance = calculateDistance(order, assignedCenter);
+                assignedCenter.setCurrentLoad(assignedCenter.getCurrentLoad() + 1);
+                centerRepository.save(assignedCenter);
+                order.setAssignedCenter(assignedCenter.getId().toString()); // Guarda el ID como String
+                order.setStatus("ASSIGNED");
+                orderRepository.save(order);
                 processedOrderDTO.setAssignedLogisticsCenter(assignedCenter.getName());
                 processedOrderDTO.setDistance(distance);
                 processedOrderDTO.setStatus("ASSIGNED");
-                order.setAssignedCenter(assignedCenter.getId().toString());
-                order.setStatus("ASSIGNED");
-                orderRepository.save(order);
             } else {
-                if (availableCenters.isEmpty()) {
-                    processedOrderDTO.setMessage("All centers are at maximum capacity.");
-                } else {
+                if (availableCenters.stream().noneMatch(center -> center.getCapacity().contains(order.getSize()))) { // Comprobación con capacity
                     processedOrderDTO.setMessage("No available centers support the order type.");
+                } else {
+                    processedOrderDTO.setMessage("All centers are at maximum capacity.");
                 }
                 processedOrderDTO.setStatus("PENDING");
             }
             processedOrders.add(processedOrderDTO);
         }
         return MapperOrder.getOrderAssignationResponseDTO(processedOrders);
-    }*/
+    }
 
     private Double calculateDistance(Order order, Center center) {
-        // Calculate the distance between the order and the center
-        // Using the Haversine formula
-        double lat1 = order.getCoordinates().getLatitude();
-        double lon1 = order.getCoordinates().getLongitude();
-        double lat2 = center.getCoordinates().getLatitude();
-        double lon2 = center.getCoordinates().getLongitude();
-        double earthRadius = 6371; // in kilometers
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double latitude1 = order.getCoordinates().getLatitude();
+        double longitude1 = order.getCoordinates().getLongitude();
+        double latitude2 = center.getCoordinates().getLatitude();
+        double longitude2 = center.getCoordinates().getLongitude();
+        double earthRadius = 6371;
+        double distLat = Math.toRadians(latitude2 - latitude1);
+        double distLon = Math.toRadians(longitude2 - longitude1);
+        double a = Math.sin(distLat / 2) * Math.sin(distLat / 2) +
+                Math.cos(Math.toRadians(latitude1)) * Math.cos(Math.toRadians(latitude2)) *
+                        Math.sin(distLon / 2) * Math.sin(distLon / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return earthRadius * c;
     }
