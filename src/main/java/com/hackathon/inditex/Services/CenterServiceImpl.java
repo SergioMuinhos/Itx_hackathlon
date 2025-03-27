@@ -52,6 +52,7 @@ public class CenterServiceImpl implements CenterService{
                     centerUpdateDTO.getCoordinates().getLongitude(), id);
         }
         updateCenterFields(centerUpdateDTO, center);
+        validateCenterCapacity(center.getCurrentLoad(), center.getMaxCapacity());
         centerRepository.save(center);
         return MapperCenter.toResponseDto(center);
     }
@@ -89,6 +90,12 @@ public class CenterServiceImpl implements CenterService{
             center.setMaxCapacity(centerUpdateDTO.getMaxCapacity());
         }
     }
+    private void validateCenterCapacity(Integer currentLoad, Integer maxCapacity){
+        if(currentLoad>maxCapacity){
+            throw  new CurrentLoadExceedsMaxCapacityException("Current load cannot exceed max capacity.");
+    }
+    }
+
 
     /**
      *
