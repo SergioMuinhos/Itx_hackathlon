@@ -16,7 +16,7 @@ public class MapperCenter {
      * @return
      */
     public static Center toEntity(CenterDTO centerDTO) {
-        Center center = new Center();
+        var center = new Center();
         center.setName(centerDTO.getName());
         center.setCapacity(centerDTO.getCapacity());
         center.setStatus(centerDTO.getStatus());
@@ -31,7 +31,7 @@ public class MapperCenter {
     }
 
     public static CenterResponseDTO toResponseDto(Center center) {
-        CenterResponseDTO centerDTO = new CenterResponseDTO();
+        var centerDTO = new CenterResponseDTO();
         centerDTO.setId(center.getId());
         centerDTO.setName(center.getName());
         centerDTO.setCapacity(center.getCapacity());
@@ -39,7 +39,7 @@ public class MapperCenter {
         centerDTO.setMaxCapacity(center.getMaxCapacity());
         centerDTO.setCurrentLoad(center.getCurrentLoad());
 
-        CoordinatesDTO coordinatesDTO = new CoordinatesDTO();
+        var coordinatesDTO = new CoordinatesDTO();
         coordinatesDTO.setLatitude(center.getCoordinates().getLatitude());
         coordinatesDTO.setLongitude(center.getCoordinates().getLongitude());
         return centerDTO;

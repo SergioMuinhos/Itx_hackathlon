@@ -17,7 +17,7 @@ public class MapperOrder {
      * @return
      */
     public static Order toEntity(OrderDTO orderDTO) {
-        Order order = new Order();
+        var order = new Order();
         order.setCustomerId(orderDTO.getCustomerId());
         order.setSize(orderDTO.getSize());
         order.setCoordinates(getCoordinates(orderDTO.getCoordinates()));
@@ -30,7 +30,7 @@ public class MapperOrder {
      * @return
      */
     public static Coordinates getCoordinates(CoordinatesDTO coordinatesDTO) {
-        Coordinates coordinates = new Coordinates();
+        var coordinates = new Coordinates();
         coordinates.setLatitude(coordinatesDTO.getLatitude());
         coordinates.setLongitude(coordinatesDTO.getLongitude());
         return coordinates;
@@ -42,7 +42,7 @@ public class MapperOrder {
      * @return
      */
     public static OrderResponseDTO toOrderResponseDTO(Order order) {
-        OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
+        var orderResponseDTO = new OrderResponseDTO();
         orderResponseDTO.setOrderId(order.getId());
         orderResponseDTO.setCustomerId(order.getCustomerId());
         orderResponseDTO.setSize(order.getSize());
@@ -59,14 +59,14 @@ public class MapperOrder {
      * @return
      */
     public static CoordinatesDTO getCoordinatesDTO(Coordinates coordinates) {
-        CoordinatesDTO coordinatesDTO = new CoordinatesDTO();
+        var coordinatesDTO = new CoordinatesDTO();
         coordinatesDTO.setLatitude(coordinates.getLatitude());
         coordinatesDTO.setLongitude(coordinates.getLongitude());
         return coordinatesDTO;
     }
 
     public static OrderAssignationResponseDTO toOrderAssignationResponseDTO(List<ProcessedOrderDTO> processedOrders) {
-        OrderAssignationResponseDTO orderAssignationResponseDTO = new OrderAssignationResponseDTO();
+        var orderAssignationResponseDTO = new OrderAssignationResponseDTO();
         orderAssignationResponseDTO.setProcessedOrders(processedOrders);
         return orderAssignationResponseDTO;
     }

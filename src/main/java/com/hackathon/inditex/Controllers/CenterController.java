@@ -45,8 +45,7 @@ public class CenterController {
      */
     @GetMapping
     public  ResponseEntity<List<CenterResponseDTO>> getAllCenters(){
-        List<CenterResponseDTO> centers = centerService.getAllCenters();
-        return ResponseEntity.ok(centers);
+        return ResponseEntity.ok(centerService.getAllCenters());
     }
 
     /**

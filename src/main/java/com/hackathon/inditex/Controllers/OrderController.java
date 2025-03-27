@@ -24,32 +24,30 @@ public class OrderController {
 
     /**
      * Assign Orders
-     * @return
+     * @return ResponseEntity Listo of OrderAssignationResponseDTO
      */
     @PostMapping("/order-assignations")
     public ResponseEntity<OrderAssignationResponseDTO> assignOrders() {
-        OrderAssignationResponseDTO orderAssignationResponseDTO = orderService.assignOrders();
-        return ResponseEntity.ok(orderAssignationResponseDTO);
+        return ResponseEntity.ok(orderService.assignOrders());
     }
 
     /**
      * Create Order
      * @param orderDTO order to create
-     * @return
+     * @return OrderResponseDTO
      */
     @PostMapping
     public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderDTO orderDTO) {
-        OrderResponseDTO orderResponseDTO = orderService.createOrder(orderDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(orderResponseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(orderService.createOrder(orderDTO));
     }
 
     /**
      * Get All Orders
-     * @return
+     * @return List of OrderResponseDTO
      */
     @GetMapping
     public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
-        List<OrderResponseDTO> orders = orderService.getAllOrders();
-        return ResponseEntity.ok(orders);
+        return ResponseEntity.ok(orderService.getAllOrders());
     }
 }
