@@ -27,11 +27,14 @@ import java.util.Optional;
 @Validated
 public class OrderServiceImpl implements OrderService {
 
-    @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
     private CenterRepository centerRepository;
+
+    public OrderServiceImpl(OrderRepository orderRepository, CenterRepository centerRepository) {
+        this.orderRepository = orderRepository;
+        this.centerRepository = centerRepository;
+    }
 
     private static final String PENDING = "PENDING";
     private static final String AVAILABLE = "AVAILABLE";
