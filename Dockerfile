@@ -13,9 +13,14 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk:21-jdk-slim
 
+RUN addgroup --system appuser && \
+    adduser --system --no-create-home --ingroup appuser appuser
+
 WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
+
+USER appuser
 
 EXPOSE 3000
 
