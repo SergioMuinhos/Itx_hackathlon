@@ -27,18 +27,14 @@ import java.util.Optional;
 @Validated
 public class OrderServiceImpl implements OrderService {
 
-
+    @Autowired
     private OrderRepository orderRepository;
 
-
+    @Autowired
     private CenterRepository centerRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, CenterRepository centerRepository) {
-        this.orderRepository = orderRepository;
-        this.centerRepository = centerRepository;
-    }
-
     private static final String PENDING = "PENDING";
+    private static final String AVAILABLE = "AVAILABLE";
     private static final String ASSIGNED = "ASSIGNED";
 
 
@@ -80,7 +76,7 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
 
         List<Center> availableCenters = centerRepository.findAll().stream()
-                .filter(center -> center.getStatus().equals(ASSIGNED))
+                .filter(center -> center.getStatus().equals(AVAILABLE))
                 .toList();
         List<ProcessedOrderDTO> processedOrders = new ArrayList<>();
 
