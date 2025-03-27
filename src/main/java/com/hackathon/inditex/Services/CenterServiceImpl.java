@@ -45,16 +45,34 @@ public class CenterServiceImpl implements CenterService{
 
     @Override
     public CenterResponseDTO updateCenter(Long id, CenterUpdateDTO centerUpdateDTO) {
-        Center center = centerRepository.findById(id).orElseThrow(() -> new CenterNotFoundException("Center not found."));
-        validateDuplicateCoordinates(centerUpdateDTO.getCoordinates().getLatitude(),
-                centerUpdateDTO.getCoordinates().getLongitude(), id);
+        var center = centerRepository.findById(id)
+                .orElseThrow(() -> new CenterNotFoundException("Center not found."));
+        if (centerUpdateDTO.getCoordinates() != null) {
+            validateDuplicateCoordinates(centerUpdateDTO.getCoordinates().getLatitude(),
+                    centerUpdateDTO.getCoordinates().getLongitude(), id);
+        }
 
-        center.setName(centerUpdateDTO.getName());
-        center.setCapacity(centerUpdateDTO.getCapacity());
-        center.setStatus(centerUpdateDTO.getStatus());
-        center.getCoordinates().setLatitude(centerUpdateDTO.getCoordinates().getLatitude());
-        center.getCoordinates().setLongitude(centerUpdateDTO.getCoordinates().getLongitude());
-        return MapperCenter.toResponseDto(centerRepository.save(center)) ;
+        if (centerUpdateDTO.getName() != null) {
+            center.setName(centerUpdateDTO.getName());
+        }
+        if (centerUpdateDTO.getCapacity() != null) {
+            center.setCapacity(centerUpdateDTO.getCapacity());
+        }
+        if (centerUpdateDTO.getStatus() != null) {
+            center.setStatus(centerUpdateDTO.getStatus());
+        }
+        if (centerUpdateDTO.getCoordinates() != null) {
+            center.getCoordinates().setLatitude(centerUpdateDTO.getCoordinates().getLatitude());
+            center.getCoordinates().setLongitude(centerUpdateDTO.getCoordinates().getLongitude());
+        }
+        if(centerUpdateDTO.getCurrentLoad()!=null && !centerUpdateDTO.getCurrentLoad().equals(center.getCurrentLoad())){
+            center.setCurrentLoad(centerUpdateDTO.getCurrentLoad());
+        }
+        if(centerUpdateDTO.getMaxCapacity()!=null && !centerUpdateDTO.getMaxCapacity().equals(center.getMaxCapacity())){
+            center.setMaxCapacity(centerUpdateDTO.getMaxCapacity());
+        }
+        centerRepository.save(center);
+        return MapperCenter.toResponseDto(center);
     }
 
     @Override

@@ -42,6 +42,7 @@ public class MapperCenter {
         var coordinatesDTO = new CoordinatesDTO();
         coordinatesDTO.setLatitude(center.getCoordinates().getLatitude());
         coordinatesDTO.setLongitude(center.getCoordinates().getLongitude());
+        centerDTO.setCoordinates(coordinatesDTO);
         return centerDTO;
     }
 }

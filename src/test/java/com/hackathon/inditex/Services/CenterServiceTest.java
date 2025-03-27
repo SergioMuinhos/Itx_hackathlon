@@ -136,6 +136,22 @@ public class CenterServiceTest {
         Center center2 = new Center();
         center2.setId(2L);
         center2.setName("Center B");
+        center1.setCapacity("MS");
+        center2.setCapacity("MS");
+        center1.setStatus("AVAILABLE");
+        center2.setStatus("AVAILABLE");
+        center1.setMaxCapacity(5);
+        center2.setMaxCapacity(5);
+        center1.setCurrentLoad(4);
+        center2.setCurrentLoad(4);
+        Coordinates coordinates1 = new Coordinates();
+        coordinates1.setLatitude(42.3601);
+        coordinates1.setLongitude(-71.0589);
+        center1.setCoordinates(coordinates1);
+        Coordinates coordinates2 = new Coordinates();
+        coordinates2.setLatitude(42.3601);
+        coordinates2.setLongitude(-71.0589);
+        center2.setCoordinates(coordinates2);
         when(centerRepository.findAll()).thenReturn(List.of(center1, center2));
 
         List<CenterResponseDTO> result = centerService.getAllCenters();
@@ -150,26 +166,31 @@ public class CenterServiceTest {
         Long id = 1L;
         CenterUpdateDTO centerUpdateDTO = new CenterUpdateDTO();
         centerUpdateDTO.setName("New Center Name");
-        centerUpdateDTO.setCapacity("M");
         centerUpdateDTO.setStatus("OCCUPIED");
-        CoordinatesDTO coordinatesDTO = new CoordinatesDTO();
-        coordinatesDTO.setLatitude(43.3601);
-        coordinatesDTO.setLongitude(-72.0589);
-        centerUpdateDTO.setCoordinates(coordinatesDTO);
+        centerUpdateDTO.setCapacity("M");
 
         Center existingCenter = new Center();
         existingCenter.setId(id);
         existingCenter.setName("Center A");
         existingCenter.setCapacity("MS");
         existingCenter.setStatus("AVAILABLE");
+        existingCenter.setMaxCapacity(5);
+        existingCenter.setCurrentLoad(4);
         Coordinates coordinates = new Coordinates();
         coordinates.setLatitude(42.3601);
         coordinates.setLongitude(-71.0589);
         existingCenter.setCoordinates(coordinates);
 
+        Center centerUpdated = new Center();
+        centerUpdated.setName(centerUpdateDTO.getName());
+        centerUpdated.setStatus(centerUpdateDTO.getStatus());
+        centerUpdated.setCapacity(centerUpdateDTO.getCapacity());
+        centerUpdated.setCoordinates(coordinates);
+
+
         when(centerRepository.findById(id)).thenReturn(Optional.of(existingCenter));
         when(centerRepository.findByCoordinatesLatitudeAndCoordinatesLongitude(any(Double.class), any(Double.class))).thenReturn(Optional.empty());
-        when(centerRepository.save(any(Center.class))).thenReturn(existingCenter);
+        when(centerRepository.save(any(Center.class))).thenReturn(centerUpdated);
 
         CenterResponseDTO result = centerService.updateCenter(id, centerUpdateDTO);
 
@@ -177,8 +198,8 @@ public class CenterServiceTest {
         assertEquals("New Center Name", result.getName());
         assertEquals("M", result.getCapacity());
         assertEquals("OCCUPIED", result.getStatus());
-        assertEquals(43.3601, result.getCoordinates().getLatitude());
-        assertEquals(-72.0589, result.getCoordinates().getLongitude());
+        assertEquals((Double)42.3601, result.getCoordinates().getLatitude());
+        assertEquals((Double) (-71.0589), result.getCoordinates().getLongitude());
     }
 
     @Test
