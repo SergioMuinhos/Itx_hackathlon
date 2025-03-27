@@ -16,7 +16,7 @@ public class MapperOrder {
      * @param orderDTO
      * @return
      */
-    public static Order toDto(OrderDTO orderDTO) {
+    public static Order toEntity(OrderDTO orderDTO) {
         Order order = new Order();
         order.setCustomerId(orderDTO.getCustomerId());
         order.setSize(orderDTO.getSize());
@@ -41,7 +41,7 @@ public class MapperOrder {
      * @param order
      * @return
      */
-    public static OrderResponseDTO getOrderResponseDTO(Order order) {
+    public static OrderResponseDTO toOrderResponseDTO(Order order) {
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
         orderResponseDTO.setOrderId(order.getId());
         orderResponseDTO.setCustomerId(order.getCustomerId());
@@ -65,7 +65,7 @@ public class MapperOrder {
         return coordinatesDTO;
     }
 
-    public static OrderAssignationResponseDTO getOrderAssignationResponseDTO(List<ProcessedOrderDTO> processedOrders) {
+    public static OrderAssignationResponseDTO toOrderAssignationResponseDTO(List<ProcessedOrderDTO> processedOrders) {
         OrderAssignationResponseDTO orderAssignationResponseDTO = new OrderAssignationResponseDTO();
         orderAssignationResponseDTO.setProcessedOrders(processedOrders);
         return orderAssignationResponseDTO;

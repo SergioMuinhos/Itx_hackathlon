@@ -37,10 +37,10 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderResponseDTO createOrder(OrderDTO orderDTO) {
-        Order order = MapperOrder.toDto(orderDTO);
+        Order order = MapperOrder.toEntity(orderDTO);
         order.setStatus("PENDING");
         Order savedOrder = orderRepository.save(order);
-        return MapperOrder.getOrderResponseDTO(savedOrder);
+        return MapperOrder.toOrderResponseDTO(savedOrder);
     }
 
     /**
@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderResponseDTO> getAllOrders() {
         return orderRepository.findAll().stream()
-                .map(MapperOrder::getOrderResponseDTO)
+                .map(MapperOrder::toOrderResponseDTO)
                 .toList();
     }
 
@@ -107,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
             }
             processedOrders.add(processedOrderDTO);
         }
-        return MapperOrder.getOrderAssignationResponseDTO(processedOrders);
+        return MapperOrder.toOrderAssignationResponseDTO(processedOrders);
     }
 
     /**
