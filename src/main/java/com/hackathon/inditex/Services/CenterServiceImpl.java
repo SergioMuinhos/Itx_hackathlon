@@ -51,7 +51,7 @@ public class CenterServiceImpl implements CenterService{
                 .orElseThrow(() -> new CenterNotFoundException("Center not found."));
         if (centerUpdateDTO.getCoordinates() != null) {
             validateDuplicateCoordinates(centerUpdateDTO.getCoordinates().getLatitude(),
-                    centerUpdateDTO.getCoordinates().getLongitude(), id);
+                    centerUpdateDTO.getCoordinates().getLongitude());
         }
         updateCenterFields(centerUpdateDTO, center);
         validateCenterCapacity(center.getCurrentLoad(), center.getMaxCapacity());
@@ -110,19 +110,5 @@ public class CenterServiceImpl implements CenterService{
         }
     }
 
-    /**
-     *
-     * @param latitude
-     * @param longitude
-     * @param id
-     */
-    private void validateDuplicateCoordinates(double latitude, double longitude, Long id) {
-        centerRepository.findByCoordinatesLatitudeAndCoordinatesLongitude(latitude, longitude)
-                .ifPresent(existingCenter -> {
-                    if (!existingCenter.getId().equals(id)) {
-                        throw new DuplicateCenterException("There is already a logistics center in that position.");
-                    }
-                });
-    }
 
 }
