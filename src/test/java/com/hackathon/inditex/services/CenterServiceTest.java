@@ -1,7 +1,7 @@
-package com.hackathon.inditex.Services;
+package com.hackathon.inditex.services;
 
-import com.hackathon.inditex.Entities.Center;
-import com.hackathon.inditex.Entities.Coordinates;
+import com.hackathon.inditex.entities.Center;
+import com.hackathon.inditex.entities.Coordinates;
 import com.hackathon.inditex.dto.CenterDTO;
 import com.hackathon.inditex.dto.CenterResponseDTO;
 import com.hackathon.inditex.dto.CenterUpdateDTO;
@@ -9,7 +9,7 @@ import com.hackathon.inditex.dto.CoordinatesDTO;
 import com.hackathon.inditex.application.exceptions.CenterNotFoundException;
 import com.hackathon.inditex.application.exceptions.CurrentLoadExceedsMaxCapacityException;
 import com.hackathon.inditex.application.exceptions.DuplicateCenterException;
-import com.hackathon.inditex.Repositories.CenterRepository;
+import com.hackathon.inditex.repositories.CenterRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class CenterServiceTest {
+ class CenterServiceTest {
     @Mock
     private CenterRepository centerRepository;
 

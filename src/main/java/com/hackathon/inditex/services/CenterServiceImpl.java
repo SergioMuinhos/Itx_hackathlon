@@ -1,14 +1,14 @@
-package com.hackathon.inditex.Services;
+package com.hackathon.inditex.services;
 
-import com.hackathon.inditex.Entities.Center;
+import com.hackathon.inditex.entities.Center;
 import com.hackathon.inditex.dto.CenterDTO;
 import com.hackathon.inditex.dto.CenterResponseDTO;
 import com.hackathon.inditex.dto.CenterUpdateDTO;
 import com.hackathon.inditex.application.exceptions.CenterNotFoundException;
 import com.hackathon.inditex.application.exceptions.CurrentLoadExceedsMaxCapacityException;
 import com.hackathon.inditex.application.exceptions.DuplicateCenterException;
-import com.hackathon.inditex.Entities.mappers.MapperCenter;
-import com.hackathon.inditex.Repositories.CenterRepository;
+import com.hackathon.inditex.entities.mappers.MapperCenter;
+import com.hackathon.inditex.repositories.CenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +24,12 @@ import java.util.List;
 @Validated
 public class CenterServiceImpl implements CenterService{
 
-    @Autowired
+
     private CenterRepository centerRepository;
+
+    public CenterServiceImpl(CenterRepository centerRepository) {
+        this.centerRepository = centerRepository;
+    }
 
     @Override
     public CenterResponseDTO createCenter(CenterDTO centerDTO) {

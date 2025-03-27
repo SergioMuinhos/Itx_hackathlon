@@ -1,13 +1,11 @@
-package com.hackathon.inditex.Controllers;
+package com.hackathon.inditex.controllers;
 
-import com.hackathon.inditex.Entities.Center;
 import com.hackathon.inditex.dto.CenterDTO;
 import com.hackathon.inditex.dto.CenterResponseDTO;
 import com.hackathon.inditex.dto.CenterUpdateDTO;
 import com.hackathon.inditex.application.exceptions.CenterNotFoundException;
 import com.hackathon.inditex.dto.models.MessageResponse;
-import com.hackathon.inditex.Services.CenterService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.hackathon.inditex.services.CenterService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +19,12 @@ import java.util.List;
 @RequestMapping("/api/centers")
 public class CenterController {
 
-    @Autowired
+
     private CenterService centerService;
+
+    public CenterController(CenterService centerService){
+        this.centerService = centerService;
+    }
 
     /**
      * Create Center
@@ -73,7 +75,7 @@ public class CenterController {
     public ResponseEntity<MessageResponse> deleteCenter(@PathVariable Long id){
         try{
             centerService.deleteCenter(id);
-            return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Logistics center deleted succesfully."));
+            return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Logistics center deleted successfully."));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(e.getMessage()));
         }

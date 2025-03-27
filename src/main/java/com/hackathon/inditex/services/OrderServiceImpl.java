@@ -1,10 +1,10 @@
-package com.hackathon.inditex.Services;
+package com.hackathon.inditex.services;
 
-import com.hackathon.inditex.Entities.Center;
-import com.hackathon.inditex.Entities.Order;
-import com.hackathon.inditex.Entities.mappers.MapperOrder;
-import com.hackathon.inditex.Repositories.CenterRepository;
-import com.hackathon.inditex.Repositories.OrderRepository;
+import com.hackathon.inditex.entities.Center;
+import com.hackathon.inditex.entities.Order;
+import com.hackathon.inditex.entities.mappers.MapperOrder;
+import com.hackathon.inditex.repositories.CenterRepository;
+import com.hackathon.inditex.repositories.OrderRepository;
 import com.hackathon.inditex.dto.OrderAssignationResponseDTO;
 import com.hackathon.inditex.dto.OrderDTO;
 import com.hackathon.inditex.dto.OrderResponseDTO;
@@ -27,11 +27,20 @@ import java.util.Optional;
 @Validated
 public class OrderServiceImpl implements OrderService {
 
-    @Autowired
+
     private OrderRepository orderRepository;
 
-    @Autowired
+
     private CenterRepository centerRepository;
+
+    public OrderServiceImpl(OrderRepository orderRepository, CenterRepository centerRepository) {
+        this.orderRepository = orderRepository;
+        this.centerRepository = centerRepository;
+    }
+
+    private static final String PENDING = "PENDING";
+    private static final String ASSIGNED = "ASSIGNED";
+
 
     /**
      * Create Order.
@@ -41,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponseDTO createOrder(OrderDTO orderDTO) {
         Order order = MapperOrder.toEntity(orderDTO);
-        order.setStatus("PENDING");
+        order.setStatus(PENDING);
         Order savedOrder = orderRepository.save(order);
         return MapperOrder.toOrderResponseDTO(savedOrder);
     }
@@ -66,12 +75,12 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderAssignationResponseDTO assignOrders() {
         List<Order> pendingOrders = orderRepository.findAll().stream()
-                .filter(order -> order.getStatus().equals("PENDING"))
+                .filter(order -> order.getStatus().equals(PENDING))
                 .sorted(Comparator.comparingLong(Order::getId))
                 .toList();
 
         List<Center> availableCenters = centerRepository.findAll().stream()
-                .filter(center -> center.getStatus().equals("AVAILABLE"))
+                .filter(center -> center.getStatus().equals(ASSIGNED))
                 .toList();
         List<ProcessedOrderDTO> processedOrders = new ArrayList<>();
 
@@ -95,18 +104,18 @@ public class OrderServiceImpl implements OrderService {
                 assignedCenter.setCurrentLoad(assignedCenter.getCurrentLoad() + 1);
                 centerRepository.save(assignedCenter);
                 order.setAssignedCenter(assignedCenter.getId().toString()); // Guarda el ID como String
-                order.setStatus("ASSIGNED");
+                order.setStatus(ASSIGNED);
                 orderRepository.save(order);
                 processedOrderDTO.setAssignedLogisticsCenter(assignedCenter.getName());
                 processedOrderDTO.setDistance(distance);
-                processedOrderDTO.setStatus("ASSIGNED");
+                processedOrderDTO.setStatus(ASSIGNED);
             } else {
                 if (availableCenters.stream().noneMatch(center -> center.getCapacity().contains(order.getSize()))) { // Comprobación con capacity
                     processedOrderDTO.setMessage("No available centers support the order type.");
                 } else {
                     processedOrderDTO.setMessage("All centers are at maximum capacity.");
                 }
-                processedOrderDTO.setStatus("PENDING");
+                processedOrderDTO.setStatus(PENDING);
             }
             processedOrders.add(processedOrderDTO);
         }

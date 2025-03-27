@@ -1,7 +1,7 @@
-package com.hackathon.inditex.Entities.mappers;
+package com.hackathon.inditex.entities.mappers;
 
-import com.hackathon.inditex.Entities.Center;
-import com.hackathon.inditex.Entities.Coordinates;
+import com.hackathon.inditex.entities.Center;
+import com.hackathon.inditex.entities.Coordinates;
 import com.hackathon.inditex.dto.CenterDTO;
 import com.hackathon.inditex.dto.CenterResponseDTO;
 import com.hackathon.inditex.dto.CoordinatesDTO;
@@ -10,6 +10,12 @@ import com.hackathon.inditex.dto.CoordinatesDTO;
  * Center Mapper.
  */
 public class MapperCenter {
+    /**
+     * Constructor.
+     */
+    private MapperCenter() {
+    }
+
     /**
      * Mapper to Entity
      * @param centerDTO

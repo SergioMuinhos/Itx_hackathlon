@@ -1,6 +1,6 @@
-package com.hackathon.inditex.Repositories;
+package com.hackathon.inditex.repositories;
 
-import com.hackathon.inditex.Entities.Center;
+import com.hackathon.inditex.entities.Center;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

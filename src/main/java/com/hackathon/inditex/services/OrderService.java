@@ -1,4 +1,4 @@
-package com.hackathon.inditex.Services;
+package com.hackathon.inditex.services;
 
 import com.hackathon.inditex.dto.OrderAssignationResponseDTO;
 import com.hackathon.inditex.dto.OrderDTO;

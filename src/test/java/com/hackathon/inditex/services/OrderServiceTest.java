@@ -1,10 +1,10 @@
-package com.hackathon.inditex.Services;
+package com.hackathon.inditex.services;
 
-import com.hackathon.inditex.Entities.Center;
-import com.hackathon.inditex.Entities.Coordinates;
-import com.hackathon.inditex.Entities.Order;
-import com.hackathon.inditex.Repositories.CenterRepository;
-import com.hackathon.inditex.Repositories.OrderRepository;
+import com.hackathon.inditex.entities.Center;
+import com.hackathon.inditex.entities.Coordinates;
+import com.hackathon.inditex.entities.Order;
+import com.hackathon.inditex.repositories.CenterRepository;
+import com.hackathon.inditex.repositories.OrderRepository;
 import com.hackathon.inditex.dto.CoordinatesDTO;
 import com.hackathon.inditex.dto.OrderAssignationResponseDTO;
 import com.hackathon.inditex.dto.OrderDTO;
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
-public class OrderServiceTest {
+ class OrderServiceTest {
     @Mock
     private OrderRepository orderRepository;
 
