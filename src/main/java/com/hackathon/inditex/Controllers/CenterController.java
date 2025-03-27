@@ -3,7 +3,7 @@ package com.hackathon.inditex.Controllers;
 import com.hackathon.inditex.Entities.Center;
 import com.hackathon.inditex.dto.CenterDTO;
 import com.hackathon.inditex.dto.CenterUpdateDTO;
-import com.hackathon.inditex.Controllers.exceptions.CenterNotFoundException;
+import com.hackathon.inditex.application.exceptions.CenterNotFoundException;
 import com.hackathon.inditex.dto.models.MessageResponse;
 import com.hackathon.inditex.Services.CenterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +25,11 @@ public class CenterController {
 
     /**
      * Create Center
-     * @param centerDTO
-     * @return
+     * @param centerDTO data to create center
+     * @return ResponseEntity with message
      */
     @PostMapping
-    public ResponseEntity<?> createCenter(@RequestBody CenterDTO centerDTO){
+    public ResponseEntity<MessageResponse> createCenter(@RequestBody CenterDTO centerDTO){
         try{
             centerService.createCenter(centerDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Logistics center created successfully."));
@@ -50,12 +50,12 @@ public class CenterController {
 
     /**
      * Update Center
-     * @param id Id of center to update
+     * @param id Identifier of center to update
      * @param centerUpdateDTO Center to update
-     * @return
+     * @return ResponseEntity with message
      */
-    @PatchMapping("{id}")
-    public ResponseEntity<?> updateCenter(@PathVariable Long id, @RequestBody CenterUpdateDTO centerUpdateDTO){
+    @PatchMapping("/{id}")
+    public ResponseEntity<MessageResponse> updateCenter(@PathVariable Long id, @RequestBody CenterUpdateDTO centerUpdateDTO){
         try{
             centerService.updateCenter(id, centerUpdateDTO);
             return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Logistics center updated successfully."));
@@ -67,10 +67,10 @@ public class CenterController {
     /**
      * Delete Center
      * @param id
-     * @return
+     * @return ResponseEntity with message
      */
-    @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteCenter(@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> deleteCenter(@PathVariable Long id){
         try{
             centerService.deleteCenter(id);
             return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Logistics center deleted succesfully."));

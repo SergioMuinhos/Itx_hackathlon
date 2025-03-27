@@ -45,11 +45,14 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Get All Orders.
+     *
      * @return
      */
     @Override
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public List<OrderResponseDTO> getAllOrders() {
+        return orderRepository.findAll().stream()
+                .map(MapperOrder::getOrderResponseDTO)
+                .toList();
     }
 
     /**

@@ -23,4 +23,7 @@ public class Center {
 
     @Embedded
     private Coordinates coordinates;
+
+    @Version
+    private Long version;
 }

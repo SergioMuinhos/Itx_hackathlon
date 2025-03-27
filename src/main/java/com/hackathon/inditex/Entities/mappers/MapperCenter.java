@@ -8,7 +8,12 @@ import com.hackathon.inditex.dto.CenterDTO;
  * Center Mapper.
  */
 public class MapperCenter {
-    public static Center toDto(CenterDTO centerDTO) {
+    /**
+     * Mapper to Entity
+     * @param centerDTO
+     * @return
+     */
+    public static Center toEntity(CenterDTO centerDTO) {
         Center center = new Center();
         center.setName(centerDTO.getName());
         center.setCapacity(centerDTO.getCapacity());

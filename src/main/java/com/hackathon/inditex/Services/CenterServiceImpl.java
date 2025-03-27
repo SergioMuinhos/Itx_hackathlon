@@ -3,13 +3,14 @@ package com.hackathon.inditex.Services;
 import com.hackathon.inditex.Entities.Center;
 import com.hackathon.inditex.dto.CenterDTO;
 import com.hackathon.inditex.dto.CenterUpdateDTO;
-import com.hackathon.inditex.Controllers.exceptions.CenterNotFoundException;
-import com.hackathon.inditex.Controllers.exceptions.CurrentLoadExceedsMaxCapacityException;
-import com.hackathon.inditex.Controllers.exceptions.DuplicateCenterException;
+import com.hackathon.inditex.application.exceptions.CenterNotFoundException;
+import com.hackathon.inditex.application.exceptions.CurrentLoadExceedsMaxCapacityException;
+import com.hackathon.inditex.application.exceptions.DuplicateCenterException;
 import com.hackathon.inditex.Entities.mappers.MapperCenter;
 import com.hackathon.inditex.Repositories.CenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import java.util.Optional;
  * Center Service Implementation.
  */
 @Service
+@Transactional
 public class CenterServiceImpl implements CenterService{
 
     @Autowired
@@ -25,16 +27,12 @@ public class CenterServiceImpl implements CenterService{
 
     @Override
     public Center createCenter(CenterDTO centerDTO) {
-        if(centerRepository.findByCoordinatesLatitudeAndCoordinatesLongitude(
-                centerDTO.getCoordinates().getLatitude(),
-                centerDTO.getCoordinates().getLongitude()
-                ).isPresent()){
-            throw  new DuplicateCenterException("There is already a logistics center in that position.");
-        }
+        validateDuplicateCoordinates(centerDTO.getCoordinates().getLatitude(), centerDTO.getCoordinates().getLongitude());
+
         if(centerDTO.getCurrentLoad()>centerDTO.getMaxCapacity()){
             throw  new CurrentLoadExceedsMaxCapacityException("Current load cannot exceed max capacity.");
         }
-        Center center = MapperCenter.toDto(centerDTO);
+        Center center = MapperCenter.toEntity(centerDTO);
         
         return centerRepository.save(center);
     }
@@ -47,13 +45,9 @@ public class CenterServiceImpl implements CenterService{
     @Override
     public Center updateCenter(Long id, CenterUpdateDTO centerUpdateDTO) {
         Center center = centerRepository.findById(id).orElseThrow(() -> new CenterNotFoundException("Center not found."));
-        Optional<Center> existingCenter = centerRepository.findByCoordinatesLatitudeAndCoordinatesLongitude(
-                centerUpdateDTO.getCoordinates().getLatitude(),
-                centerUpdateDTO.getCoordinates().getLongitude()
-        );
-        if (existingCenter.isPresent() && !existingCenter.get().getId().equals(id)) {
-             throw new DuplicateCenterException("There is already a logistics center in that position.");
-        }
+        validateDuplicateCoordinates(centerUpdateDTO.getCoordinates().getLatitude(),
+                centerUpdateDTO.getCoordinates().getLongitude(), id);
+
         center.setName(centerUpdateDTO.getName());
         center.setCapacity(centerUpdateDTO.getCapacity());
         center.setStatus(centerUpdateDTO.getStatus());
@@ -66,5 +60,20 @@ public class CenterServiceImpl implements CenterService{
     public void deleteCenter(Long id) {
     Center center = centerRepository.findById(id).orElseThrow(()-> new CenterNotFoundException("Center not found"));
     centerRepository.delete(center);
+    }
+
+    private void validateDuplicateCoordinates(double latitude, double longitude) {
+        if (centerRepository.findByCoordinatesLatitudeAndCoordinatesLongitude(latitude, longitude).isPresent()) {
+            throw new DuplicateCenterException("There is already a logistics center in that position.");
+        }
+    }
+
+    private void validateDuplicateCoordinates(double latitude, double longitude, Long id) {
+        centerRepository.findByCoordinatesLatitudeAndCoordinatesLongitude(latitude, longitude)
+                .ifPresent(existingCenter -> {
+                    if (!existingCenter.getId().equals(id)) {
+                        throw new DuplicateCenterException("There is already a logistics center in that position.");
+                    }
+                });
     }
 }

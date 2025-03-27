@@ -1,4 +1,4 @@
-package com.hackathon.inditex.Controllers.exceptions;
+package com.hackathon.inditex.application.exceptions;
 
 /**
  * Center Not Found Exception.

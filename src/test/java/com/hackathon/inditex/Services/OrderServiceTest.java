@@ -102,15 +102,15 @@ public class OrderServiceTest {
 
         when(orderRepository.findAll()).thenReturn(List.of(order1, order2));
 
-        List<Order> result = orderService.getAllOrders();
+        List<OrderResponseDTO> result = orderService.getAllOrders();
 
         assertNotNull(result);
         assertEquals(2, result.size());
-        assertEquals(1L, result.get(0).getId());
+        assertEquals(1L, result.get(0).getOrderId());
         assertEquals(203L, result.get(0).getCustomerId());
         assertEquals("B", result.get(0).getSize());
         assertEquals("PENDING", result.get(0).getStatus());
-        assertEquals(2L, result.get(1).getId());
+        assertEquals(2L, result.get(1).getOrderId());
         assertEquals(204L, result.get(1).getCustomerId());
         assertEquals("M", result.get(1).getSize());
         assertEquals("PENDING", result.get(1).getStatus());

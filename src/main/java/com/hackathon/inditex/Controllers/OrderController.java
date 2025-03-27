@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Order Controller.
+ */
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
@@ -45,8 +48,8 @@ public class OrderController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrders() {
-        List<Order> orders = orderService.getAllOrders();
+    public ResponseEntity<List<OrderResponseDTO>> getAllOrders() {
+        List<OrderResponseDTO> orders = orderService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
 }
