@@ -26,25 +26,24 @@ import java.util.Optional;
 @Validated
 public class OrderServiceImpl implements OrderService {
 
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
 
-    private CenterRepository centerRepository;
+    private final CenterRepository centerRepository;
+
+    private static final String PENDING = "PENDING";
+    private static final String AVAILABLE = "AVAILABLE";
+    private static final String ASSIGNED = "ASSIGNED";
 
     public OrderServiceImpl(OrderRepository orderRepository, CenterRepository centerRepository) {
         this.orderRepository = orderRepository;
         this.centerRepository = centerRepository;
     }
 
-    private static final String PENDING = "PENDING";
-    private static final String AVAILABLE = "AVAILABLE";
-    private static final String ASSIGNED = "ASSIGNED";
-
-
     /**
      * Create Order.
      *
      * @param orderDTO order to create
-     * @return order createdDTO
+     * @return order response
      */
     @Override
     public OrderResponseDTO createOrder(OrderDTO orderDTO) {
@@ -57,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Get All Orders.
      *
-     * @return
+     * @return List of OderResponseDto
      */
     @Override
     public List<OrderResponseDTO> getAllOrders() {
@@ -69,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Assign Orders.
      *
-     * @return
+     * @return OrderAssignationResponseDTO
      */
     @Override
     @Transactional
@@ -91,7 +90,8 @@ public class OrderServiceImpl implements OrderService {
             Double distance = null;
 
             Optional<Center> centerOptional = availableCenters.stream()
-                    .filter(center -> center.getCapacity().contains(order.getSize()) && center.getCurrentLoad() < center.getMaxCapacity()) // Comprobación con capacity
+                    .filter(center -> center.getCapacity()
+                            .contains(order.getSize()) && center.getCurrentLoad() < center.getMaxCapacity())
                     .min((c1, c2) -> {
                         double dist1 = calculateDistance(order, c1);
                         double dist2 = calculateDistance(order, c2);
@@ -103,14 +103,15 @@ public class OrderServiceImpl implements OrderService {
                 distance = calculateDistance(order, assignedCenter);
                 assignedCenter.setCurrentLoad(assignedCenter.getCurrentLoad() + 1);
                 centerRepository.save(assignedCenter);
-                order.setAssignedCenter(assignedCenter.getId().toString()); // Guarda el ID como String
+                order.setAssignedCenter(assignedCenter.getId().toString());
                 order.setStatus(ASSIGNED);
                 orderRepository.save(order);
                 processedOrderDTO.setAssignedLogisticsCenter(assignedCenter.getName());
                 processedOrderDTO.setDistance(distance);
                 processedOrderDTO.setStatus(ASSIGNED);
             } else {
-                if (availableCenters.stream().noneMatch(center -> center.getCapacity().contains(order.getSize()))) { // Comprobación con capacity
+                if (availableCenters.stream()
+                        .noneMatch(center -> center.getCapacity().contains(order.getSize()))) {
                     processedOrderDTO.setMessage("No available centers support the order type.");
                 } else {
                     processedOrderDTO.setMessage("All centers are at maximum capacity.");
