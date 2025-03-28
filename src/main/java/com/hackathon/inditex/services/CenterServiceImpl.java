@@ -9,7 +9,6 @@ import com.hackathon.inditex.application.exceptions.CurrentLoadExceedsMaxCapacit
 import com.hackathon.inditex.application.exceptions.DuplicateCenterException;
 import com.hackathon.inditex.entities.mappers.MapperCenter;
 import com.hackathon.inditex.repositories.CenterRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +21,7 @@ import java.util.List;
 @Service
 @Transactional
 @Validated
-public class CenterServiceImpl implements CenterService{
+public class CenterServiceImpl implements CenterService {
 
 
     private CenterRepository centerRepository;
@@ -35,11 +34,11 @@ public class CenterServiceImpl implements CenterService{
     public CenterResponseDTO createCenter(CenterDTO centerDTO) {
         validateDuplicateCoordinates(centerDTO.getCoordinates().getLatitude(), centerDTO.getCoordinates().getLongitude());
         validateCenterCapacity(centerDTO.getCurrentLoad(), centerDTO.getMaxCapacity());
-        if(centerDTO.getCurrentLoad()>centerDTO.getMaxCapacity()){
-            throw  new CurrentLoadExceedsMaxCapacityException("Current load cannot exceed max capacity.");
+        if (centerDTO.getCurrentLoad() > centerDTO.getMaxCapacity()) {
+            throw new CurrentLoadExceedsMaxCapacityException("Current load cannot exceed max capacity.");
         }
         Center center = MapperCenter.toEntity(centerDTO);
-        
+
         return MapperCenter.toResponseDto(centerRepository.save(center));
     }
 
@@ -65,16 +64,17 @@ public class CenterServiceImpl implements CenterService{
 
     @Override
     public void deleteCenter(Long id) {
-    Center center = centerRepository.findById(id).orElseThrow(()-> new CenterNotFoundException("Center not found"));
-    centerRepository.delete(center);
+        Center center = centerRepository.findById(id).orElseThrow(() -> new CenterNotFoundException("Center not found"));
+        centerRepository.delete(center);
     }
 
     /**
      * Update Center  Fields
+     *
      * @param centerUpdateDTO
      * @param center
      */
-    private void updateCenterFields( CenterUpdateDTO centerUpdateDTO, Center center) {
+    private void updateCenterFields(CenterUpdateDTO centerUpdateDTO, Center center) {
 
         if (centerUpdateDTO.getName() != null) {
             center.setName(centerUpdateDTO.getName());
@@ -89,22 +89,22 @@ public class CenterServiceImpl implements CenterService{
             center.getCoordinates().setLatitude(centerUpdateDTO.getCoordinates().getLatitude());
             center.getCoordinates().setLongitude(centerUpdateDTO.getCoordinates().getLongitude());
         }
-        if(centerUpdateDTO.getCurrentLoad()!=null && !centerUpdateDTO.getCurrentLoad().equals(center.getCurrentLoad())){
+        if (centerUpdateDTO.getCurrentLoad() != null && !centerUpdateDTO.getCurrentLoad().equals(center.getCurrentLoad())) {
             center.setCurrentLoad(centerUpdateDTO.getCurrentLoad());
         }
-        if(centerUpdateDTO.getMaxCapacity()!=null && !centerUpdateDTO.getMaxCapacity().equals(center.getMaxCapacity())){
+        if (centerUpdateDTO.getMaxCapacity() != null && !centerUpdateDTO.getMaxCapacity().equals(center.getMaxCapacity())) {
             center.setMaxCapacity(centerUpdateDTO.getMaxCapacity());
         }
     }
-    private void validateCenterCapacity(Integer currentLoad, Integer maxCapacity){
-        if(currentLoad>maxCapacity){
-            throw  new CurrentLoadExceedsMaxCapacityException("Current load cannot exceed max capacity.");
-    }
+
+    private void validateCenterCapacity(Integer currentLoad, Integer maxCapacity) {
+        if (currentLoad > maxCapacity) {
+            throw new CurrentLoadExceedsMaxCapacityException("Current load cannot exceed max capacity.");
+        }
     }
 
 
     /**
-     *
      * @param latitude
      * @param longitude
      */

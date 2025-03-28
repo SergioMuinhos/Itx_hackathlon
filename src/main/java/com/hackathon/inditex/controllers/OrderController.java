@@ -19,12 +19,13 @@ public class OrderController {
 
     private OrderService orderService;
 
-    public OrderController(OrderService orderService){
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
 
     /**
      * Assign Orders
+     *
      * @return ResponseEntity Listo of OrderAssignationResponseDTO
      */
     @PostMapping("/order-assignations")
@@ -34,6 +35,7 @@ public class OrderController {
 
     /**
      * Create Order
+     *
      * @param orderDTO order to create
      * @return OrderResponseDTO
      */
@@ -45,6 +47,7 @@ public class OrderController {
 
     /**
      * Get All Orders
+     *
      * @return List of OrderResponseDTO
      */
     @GetMapping

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDTO {
-    private  Long customerId;
-    private  String size;
-    private  CoordinatesDTO coordinates;
+    private Long customerId;
+    private String size;
+    private CoordinatesDTO coordinates;
 }

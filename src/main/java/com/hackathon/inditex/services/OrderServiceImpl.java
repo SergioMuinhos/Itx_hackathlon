@@ -9,7 +9,6 @@ import com.hackathon.inditex.dto.OrderAssignationResponseDTO;
 import com.hackathon.inditex.dto.OrderDTO;
 import com.hackathon.inditex.dto.OrderResponseDTO;
 import com.hackathon.inditex.dto.ProcessedOrderDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -43,6 +42,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Create Order.
+     *
      * @param orderDTO order to create
      * @return order createdDTO
      */
@@ -68,6 +68,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Assign Orders.
+     *
      * @return
      */
     @Override
@@ -123,7 +124,8 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Calculate distance between order and center.
-     * @param order order to calculate distance
+     *
+     * @param order  order to calculate distance
      * @param center center to calculate distance
      * @return distance between order and center
      */

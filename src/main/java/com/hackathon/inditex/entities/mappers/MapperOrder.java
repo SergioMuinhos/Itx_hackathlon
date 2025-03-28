@@ -18,7 +18,6 @@ public class MapperOrder {
     }
 
     /**
-     *
      * @param orderDTO
      * @return
      */
@@ -31,7 +30,6 @@ public class MapperOrder {
     }
 
     /**
-     *
      * @param coordinatesDTO
      * @return
      */
@@ -43,7 +41,6 @@ public class MapperOrder {
     }
 
     /**
-     *
      * @param order
      * @return
      */
@@ -60,7 +57,6 @@ public class MapperOrder {
     }
 
     /**
-     *
      * @param coordinates
      * @return
      */

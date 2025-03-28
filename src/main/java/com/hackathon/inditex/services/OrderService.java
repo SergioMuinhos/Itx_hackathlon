@@ -12,6 +12,8 @@ import java.util.List;
 public interface OrderService {
 
     OrderResponseDTO createOrder(OrderDTO orderDTO);
+
     List<OrderResponseDTO> getAllOrders();
+
     OrderAssignationResponseDTO assignOrders();
 }

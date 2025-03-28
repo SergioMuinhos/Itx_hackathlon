@@ -11,14 +11,12 @@ import java.util.List;
  */
 public interface CenterService {
 
-    public CenterResponseDTO createCenter(CenterDTO centerDTO);
+    CenterResponseDTO createCenter(CenterDTO centerDTO);
 
-    public List<CenterResponseDTO> getAllCenters();
+    List<CenterResponseDTO> getAllCenters();
 
-    public CenterResponseDTO updateCenter(Long id, CenterUpdateDTO centerUpdateDTO);
+    CenterResponseDTO updateCenter(Long id, CenterUpdateDTO centerUpdateDTO);
 
-    public void deleteCenter(Long id);
-
-
+    void deleteCenter(Long id);
 
 }
