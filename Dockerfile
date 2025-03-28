@@ -15,9 +15,8 @@ FROM openjdk:21-jdk-slim
 
 RUN apt-get update && \
     apt-get install -y curl && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN addgroup --system appuser && \
+    rm -rf /var/lib/apt/lists/* && \
+    addgroup --system appuser && \
     adduser --system --no-create-home --ingroup appuser appuser
 
 WORKDIR /app
