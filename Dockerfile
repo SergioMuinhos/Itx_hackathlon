@@ -13,9 +13,7 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk:21-jdk-slim
 
-RUN apt-get update && \
-    apt-get install -y curl && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get --no-install-recommends install -y curl && rm -rf /var/lib/apt/lists/*
 
 RUN addgroup --system appuser && \
     adduser --system --no-create-home --ingroup appuser appuser
