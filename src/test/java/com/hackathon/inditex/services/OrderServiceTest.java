@@ -34,7 +34,14 @@ import static org.mockito.ArgumentMatchers.any;
     @InjectMocks
     private OrderServiceImpl orderService;
 
-    @BeforeEach
+     private static final String PENDING = "PENDING";
+     private static final String AVAILABLE = "AVAILABLE";
+     private static final String ASSIGNED = "ASSIGNED";
+     private static final String CENTER_FRANCE = "Center France";
+
+
+
+     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -46,7 +53,7 @@ import static org.mockito.ArgumentMatchers.any;
     }
 
     @Test
-    void createOrder_Success() {
+    void createOrderSuccess() {
 
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setCustomerId(203L);
@@ -60,7 +67,7 @@ import static org.mockito.ArgumentMatchers.any;
         savedOrder.setId(1L);
         savedOrder.setCustomerId(orderDTO.getCustomerId());
         savedOrder.setSize(orderDTO.getSize());
-        savedOrder.setStatus("PENDING");
+        savedOrder.setStatus(PENDING);
         Coordinates coordinates = new Coordinates();
         coordinates.setLatitude(orderDTO.getCoordinates().getLatitude());
         coordinates.setLongitude(orderDTO.getCoordinates().getLongitude());
@@ -74,17 +81,17 @@ import static org.mockito.ArgumentMatchers.any;
         assertEquals(1L, result.getOrderId());
         assertEquals(203L, result.getCustomerId());
         assertEquals("B", result.getSize());
-        assertEquals("PENDING", result.getStatus());
+        assertEquals(PENDING, result.getStatus());
         assertEquals("Order created successfully in PENDING status.", result.getMessage());
     }
 
     @Test
-    void getAllOrders_Success() {
+    void getAllOrdersSuccess() {
         Order order1 = new Order();
         order1.setId(1L);
         order1.setCustomerId(203L);
         order1.setSize("B");
-        order1.setStatus("PENDING");
+        order1.setStatus(PENDING);
         Coordinates coordinates1 = new Coordinates();
         coordinates1.setLatitude(51.5074);
         coordinates1.setLongitude(-0.1278);
@@ -94,7 +101,7 @@ import static org.mockito.ArgumentMatchers.any;
         order2.setId(2L);
         order2.setCustomerId(204L);
         order2.setSize("M");
-        order2.setStatus("PENDING");
+        order2.setStatus(PENDING);
         Coordinates coordinates2 = new Coordinates();
         coordinates2.setLatitude(40.7128);
         coordinates2.setLongitude(-74.0060);
@@ -109,21 +116,21 @@ import static org.mockito.ArgumentMatchers.any;
         assertEquals(1L, result.get(0).getOrderId());
         assertEquals(203L, result.get(0).getCustomerId());
         assertEquals("B", result.get(0).getSize());
-        assertEquals("PENDING", result.get(0).getStatus());
+        assertEquals(PENDING, result.get(0).getStatus());
         assertEquals(2L, result.get(1).getOrderId());
         assertEquals(204L, result.get(1).getCustomerId());
         assertEquals("M", result.get(1).getSize());
-        assertEquals("PENDING", result.get(1).getStatus());
+        assertEquals(PENDING, result.get(1).getStatus());
     }
 
 
     @Test
-    void assignOrders_Success() {
+    void assignOrdersSuccess() {
         Order order1 = new Order();
         order1.setId(1L);
         order1.setCustomerId(204L);
         order1.setSize("B");
-        order1.setStatus("PENDING");
+        order1.setStatus(PENDING);
         Coordinates coordinates1 = new Coordinates();
         coordinates1.setLatitude(51.5074);
         coordinates1.setLongitude(-0.1278);
@@ -133,7 +140,7 @@ import static org.mockito.ArgumentMatchers.any;
         order2.setId(2L);
         order2.setCustomerId(205L);
         order2.setSize("B");
-        order2.setStatus("PENDING");
+        order2.setStatus(PENDING);
         Coordinates coordinates2 = new Coordinates();
         coordinates2.setLatitude(52.5074);
         coordinates2.setLongitude(-1.1278);
@@ -145,9 +152,9 @@ import static org.mockito.ArgumentMatchers.any;
 
         Center center1 = new Center();
         center1.setId(1L);
-        center1.setName("Center France");
+        center1.setName(CENTER_FRANCE);
         center1.setCapacity("B");
-        center1.setStatus("AVAILABLE");
+        center1.setStatus(AVAILABLE);
         center1.setCurrentLoad(4);
         center1.setMaxCapacity(5);
         Coordinates centerCoordinates1 = new Coordinates();
@@ -167,18 +174,18 @@ import static org.mockito.ArgumentMatchers.any;
 
         assertNotNull(result);
         assertEquals(2, result.getProcessedOrders().size());
-        assertEquals("ASSIGNED", result.getProcessedOrders().get(0).getStatus());
-        assertEquals("Center France", result.getProcessedOrders().get(0).getAssignedLogisticsCenter());
-        assertEquals("PENDING", result.getProcessedOrders().get(1).getStatus());
+        assertEquals(ASSIGNED, result.getProcessedOrders().get(0).getStatus());
+        assertEquals(CENTER_FRANCE, result.getProcessedOrders().get(0).getAssignedLogisticsCenter());
+        assertEquals(PENDING, result.getProcessedOrders().get(1).getStatus());
         assertEquals("All centers are at maximum capacity.", result.getProcessedOrders().get(1).getMessage());
     }
     @Test
-    void assignOrders_NoCentersSupportOrderType() {
+    void assignOrdersNoCentersSupportOrderType() {
         Order order1 = new Order();
         order1.setId(2L);
         order1.setCustomerId(204L);
         order1.setSize("S");
-        order1.setStatus("PENDING");
+        order1.setStatus(PENDING);
         Coordinates coordinates1 = new Coordinates();
         coordinates1.setLatitude(51.5074);
         coordinates1.setLongitude(-0.1278);
@@ -189,9 +196,9 @@ import static org.mockito.ArgumentMatchers.any;
 
         Center center1 = new Center();
         center1.setId(1L);
-        center1.setName("Center France");
+        center1.setName(CENTER_FRANCE);
         center1.setCapacity("B");
-        center1.setStatus("AVAILABLE");
+        center1.setStatus(AVAILABLE);
         center1.setCurrentLoad(0);
         center1.setMaxCapacity(5);
         Coordinates centerCoordinates1 = new Coordinates();
@@ -209,7 +216,7 @@ import static org.mockito.ArgumentMatchers.any;
 
         assertNotNull(result);
         assertEquals(1, result.getProcessedOrders().size());
-        assertEquals("PENDING", result.getProcessedOrders().get(0).getStatus());
+        assertEquals(PENDING, result.getProcessedOrders().get(0).getStatus());
         assertEquals("No available centers support the order type.", result.getProcessedOrders().get(0).getMessage());
     }
 }

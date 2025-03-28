@@ -31,6 +31,11 @@ import static org.mockito.Mockito.when;
     @InjectMocks
     private CenterServiceImpl centerService;
 
+    private static final String OCCUPIED = "OCCUPIED";
+    private static final String AVAILABLE = "AVAILABLE";
+    private static final String CENTER_A = "Center A";
+    private static final String NEW_CENTER = "New Center Name";
+
     @BeforeEach
     void setUp(){
         MockitoAnnotations.openMocks(this);
@@ -43,11 +48,11 @@ import static org.mockito.Mockito.when;
 
 
     @Test
-    void createCenter_Success(){
+    void createCenterSuccess(){
         CenterDTO centerDTO = new CenterDTO();
-        centerDTO.setName("Center A");
+        centerDTO.setName(CENTER_A);
         centerDTO.setCapacity("MS");
-        centerDTO.setStatus("AVAILABLE");
+        centerDTO.setStatus(AVAILABLE);
         centerDTO.setMaxCapacity(5);
         centerDTO.setCurrentLoad(4);
         CoordinatesDTO coordinatesDTO = new CoordinatesDTO();
@@ -75,15 +80,15 @@ import static org.mockito.Mockito.when;
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
-        assertEquals("Center A", result.getName());
+        assertEquals(CENTER_A, result.getName());
     }
 
     @Test
-    void createCenter_DuplicateCenter(){
+    void createCenterDuplicateCenter(){
         CenterDTO centerDTO = new CenterDTO();
-        centerDTO.setName("Center A");
+        centerDTO.setName(CENTER_A);
         centerDTO.setCapacity("MS");
-        centerDTO.setStatus("AVAILABLE");
+        centerDTO.setStatus(AVAILABLE);
         centerDTO.setMaxCapacity(5);
         centerDTO.setCurrentLoad(4);
         CoordinatesDTO coordinatesDTO = new CoordinatesDTO();
@@ -93,9 +98,9 @@ import static org.mockito.Mockito.when;
 
         Center existingCenter = new Center();
         existingCenter.setId(1L);
-        existingCenter.setName("Center A");
+        existingCenter.setName(CENTER_A);
         existingCenter.setCapacity("MS");
-        existingCenter.setStatus("AVAILABLE");
+        existingCenter.setStatus(AVAILABLE);
         existingCenter.setMaxCapacity(5);
         existingCenter.setCurrentLoad(4);
         Coordinates coordinates = new Coordinates();
@@ -110,11 +115,11 @@ import static org.mockito.Mockito.when;
 
 
     @Test
-    void createCenter_CurrentLoadExceedsMaxCapacity() {
+    void createCenterCurrentLoadExceedsMaxCapacity() {
         CenterDTO centerDTO = new CenterDTO();
-        centerDTO.setName("Center A");
+        centerDTO.setName(CENTER_A);
         centerDTO.setCapacity("MS");
-        centerDTO.setStatus("AVAILABLE");
+        centerDTO.setStatus(AVAILABLE);
         centerDTO.setMaxCapacity(5);
         centerDTO.setCurrentLoad(6);
         CoordinatesDTO coordinatesDTO = new CoordinatesDTO();
@@ -129,17 +134,17 @@ import static org.mockito.Mockito.when;
     }
 
     @Test
-    void getAllCenters_Success() {
+    void getAllCentersSuccess() {
         Center center1 = new Center();
         center1.setId(1L);
-        center1.setName("Center A");
+        center1.setName(CENTER_A);
         Center center2 = new Center();
         center2.setId(2L);
         center2.setName("Center B");
         center1.setCapacity("MS");
         center2.setCapacity("MS");
-        center1.setStatus("AVAILABLE");
-        center2.setStatus("AVAILABLE");
+        center1.setStatus(AVAILABLE);
+        center2.setStatus(AVAILABLE);
         center1.setMaxCapacity(5);
         center2.setMaxCapacity(5);
         center1.setCurrentLoad(4);
@@ -157,23 +162,23 @@ import static org.mockito.Mockito.when;
         List<CenterResponseDTO> result = centerService.getAllCenters();
 
         assertEquals(2, result.size());
-        assertEquals("Center A", result.get(0).getName());
+        assertEquals(CENTER_A, result.get(0).getName());
         assertEquals("Center B", result.get(1).getName());
     }
 
     @Test
-    void updateCenter_Success() {
+    void updateCenterSuccess() {
         Long id = 1L;
         CenterUpdateDTO centerUpdateDTO = new CenterUpdateDTO();
-        centerUpdateDTO.setName("New Center Name");
-        centerUpdateDTO.setStatus("OCCUPIED");
+        centerUpdateDTO.setName(NEW_CENTER);
+        centerUpdateDTO.setStatus(OCCUPIED);
         centerUpdateDTO.setCapacity("M");
 
         Center existingCenter = new Center();
         existingCenter.setId(id);
-        existingCenter.setName("Center A");
+        existingCenter.setName(CENTER_A);
         existingCenter.setCapacity("MS");
-        existingCenter.setStatus("AVAILABLE");
+        existingCenter.setStatus(AVAILABLE);
         existingCenter.setMaxCapacity(5);
         existingCenter.setCurrentLoad(4);
         Coordinates coordinates = new Coordinates();
@@ -195,20 +200,20 @@ import static org.mockito.Mockito.when;
         CenterResponseDTO result = centerService.updateCenter(id, centerUpdateDTO);
 
         assertNotNull(result);
-        assertEquals("New Center Name", result.getName());
+        assertEquals(NEW_CENTER, result.getName());
         assertEquals("M", result.getCapacity());
-        assertEquals("OCCUPIED", result.getStatus());
+        assertEquals(OCCUPIED, result.getStatus());
         assertEquals((Double)42.3601, result.getCoordinates().getLatitude());
         assertEquals((Double) (-71.0589), result.getCoordinates().getLongitude());
     }
 
     @Test
-    void updateCenter_CenterNotFound(){
+    void updateCenterCenterNotFound(){
         Long id = 1L;
         CenterUpdateDTO centerUpdateDTO = new CenterUpdateDTO();
-        centerUpdateDTO.setName("New Center Name");
+        centerUpdateDTO.setName(NEW_CENTER);
         centerUpdateDTO.setCapacity("M");
-        centerUpdateDTO.setStatus("OCCUPIED");
+        centerUpdateDTO.setStatus(OCCUPIED);
         CoordinatesDTO coordinatesDTO = new CoordinatesDTO();
         coordinatesDTO.setLatitude(43.3601);
         coordinatesDTO.setLongitude(-72.0589);
