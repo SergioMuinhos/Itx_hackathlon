@@ -13,6 +13,10 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk:21-jdk-slim
 
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN addgroup --system appuser && \
     adduser --system --no-create-home --ingroup appuser appuser
 
@@ -24,7 +28,9 @@ USER appuser
 
 EXPOSE 3000
 
-CMD ["java", "-jar", "app.jar"]
-
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
     CMD curl --fail http://localhost:3000/health || exit 1
+
+CMD ["java", "-jar", "app.jar"]
+
+
