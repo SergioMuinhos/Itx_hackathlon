@@ -15,8 +15,9 @@ FROM openjdk:21-jdk-slim
 
 RUN apt-get update && \
     apt-get install -y curl && \
-    rm -rf /var/lib/apt/lists/* && \
-    addgroup --system appuser && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN addgroup --system appuser && \
     adduser --system --no-create-home --ingroup appuser appuser
 
 WORKDIR /app
@@ -27,9 +28,7 @@ USER appuser
 
 EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-    CMD curl --fail http://localhost:3000/health || exit 1
-
 CMD ["java", "-jar", "app.jar"]
 
-
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD curl --fail http://localhost:3000/health || exit 1
